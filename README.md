@@ -16,12 +16,13 @@ Example
     
     // Load the xml output from tiled during the initilization of the Scene.
     // Note that OpenTileMap will attempt to load the associated tilesets and tile images 
-	Tilemap = etiled.OpenTileMap("assets/tilemap/base.tmx")
+    Tilemap = etiled.OpenTileMap("assets/tilemap/base.tmx")
     // Defines the draw parameters of the tilemap tiles
-	Tilemap.Zoom = 1
+    Tilemap.Zoom = 1
+
 
     // Call Update on the Tilemap during the ebitengine Update loop
-	Tilemap.Update(nil)
+    Tilemap.Update(nil)
 
     // Call Draw on the Tileap during the ebitegine Draw loop
     Tilemap.Draw(worldScreen)
