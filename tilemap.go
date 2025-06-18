@@ -1,4 +1,4 @@
-package main
+package tilemap
 
 import (
 	"encoding/xml"
