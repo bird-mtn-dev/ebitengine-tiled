@@ -22,7 +22,7 @@ Example
 
 
     // Call Update on the Tilemap during the ebitengine Update loop
-    Tilemap.Update(nil)
+    Tilemap.Update()
 
     // Call Draw on the Tileap during the ebitegine Draw loop
     Tilemap.Draw(worldScreen)

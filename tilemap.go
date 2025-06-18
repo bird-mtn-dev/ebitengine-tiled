@@ -480,7 +480,7 @@ func (tileMap *TileMap) GetDimensions() (int, int) {
 	return int(float64(tileMap.Width) * float64(tileMap.TileWidth) * tileMap.Zoom), int(float64(tileMap.Height) * float64(tileMap.TileHeight) * tileMap.Zoom)
 }
 
-func (tileMap *TileMap) Update(data *interface{}) {
+func (tileMap *TileMap) Update() {
 	tileMap.currentTick = tileMap.currentTick + 1
 	tileMap.currentTick = tileMap.currentTick % (ebiten.TPS() * 10)
 }
