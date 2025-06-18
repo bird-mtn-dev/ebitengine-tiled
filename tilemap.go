@@ -22,28 +22,27 @@ type Property struct {
 }
 
 type TileMap struct {
-	XMLName        xml.Name `xml:"map"`
-	Version        string   `xml:"version,attr"`
-	TiledVersion   string   `xml:"tiledversion,attr"`
-	Path           string
-	Orientation    string               `xml:"orientation,attr"`
-	RenderOrder    string               `xml:"renderorder,attr"`
-	Width          int                  `xml:"width,attr"`
-	Height         int                  `xml:"height,attr"`
-	TileWidth      int                  `xml:"tilewidth,attr"`
-	TileHeight     int                  `xml:"tileheight,attr"`
-	Infinite       bool                 `xml:"infinite,attr"`
-	TileSets       []TileSetDefinition  `xml:"tileset"`
-	GroupLayers    []GroupLayer         `xml:"group"`
-	Layers         []Layer              `xml:"layer"`
-	ObjectGroups   []TileMapObjectGroup `xml:"objectgroup"`
-	Properties     []Property           `xml:"properties>property"`
-	currentTick    int
-	TicksPerSecond int
-	allLayers      []*Layer
-	allGroups      []*TileMapObjectGroup
-	AllCollisions  []*TileSetObject
-	Zoom           float64
+	XMLName       xml.Name `xml:"map"`
+	Version       string   `xml:"version,attr"`
+	TiledVersion  string   `xml:"tiledversion,attr"`
+	Path          string
+	Orientation   string               `xml:"orientation,attr"`
+	RenderOrder   string               `xml:"renderorder,attr"`
+	Width         int                  `xml:"width,attr"`
+	Height        int                  `xml:"height,attr"`
+	TileWidth     int                  `xml:"tilewidth,attr"`
+	TileHeight    int                  `xml:"tileheight,attr"`
+	Infinite      bool                 `xml:"infinite,attr"`
+	TileSets      []TileSetDefinition  `xml:"tileset"`
+	GroupLayers   []GroupLayer         `xml:"group"`
+	Layers        []Layer              `xml:"layer"`
+	ObjectGroups  []TileMapObjectGroup `xml:"objectgroup"`
+	Properties    []Property           `xml:"properties>property"`
+	currentTick   int
+	allLayers     []*Layer
+	allGroups     []*TileMapObjectGroup
+	AllCollisions []*TileSetObject
+	Zoom          float64
 }
 
 type TileSetDefinition struct {
@@ -173,11 +172,11 @@ func (layer *Layer) Draw(screen *ebiten.Image) {
 				var effectiveTick int
 				if tileData.PreviousFrame != nil {
 					if tileMap.currentTick < tileData.PreviousTick {
-						effectiveTick = tileMap.currentTick + ((tileMap.TicksPerSecond * 10) - tileData.PreviousTick)
+						effectiveTick = tileMap.currentTick + ((ebiten.TPS() * 10) - tileData.PreviousTick)
 					} else {
 						effectiveTick = tileMap.currentTick - tileData.PreviousTick
 					}
-					if float64(effectiveTick)/float64(tileMap.TicksPerSecond) > (float64(tileData.Animation[*tileData.PreviousFrame].Duration) / 1000) {
+					if float64(effectiveTick)/float64(ebiten.TPS()) > (float64(tileData.Animation[*tileData.PreviousFrame].Duration) / 1000) {
 						frameIdx = (*tileData.PreviousFrame + 1) % len(tileData.Animation)
 						tileData.PreviousFrame = &frameIdx
 						tileData.PreviousTick = tileMap.currentTick
@@ -189,8 +188,8 @@ func (layer *Layer) Draw(screen *ebiten.Image) {
 				tileId = tileData.Animation[*tileData.PreviousFrame].TileId
 			}
 
-			tlX := float64(x * 16)
-			tlY := float64(y * 16)
+			tlX := float64(x * tileMap.TileWidth)
+			tlY := float64(y * tileMap.TileHeight)
 
 			op := &ebiten.DrawImageOptions{}
 			op.GeoM.Translate(tlX, tlY)
@@ -267,11 +266,11 @@ func (objectGroup *TileMapObjectGroup) Draw(screen *ebiten.Image) {
 			var effectiveTick int
 			if tileData.PreviousFrame != nil {
 				if tileMap.currentTick < tileData.PreviousTick {
-					effectiveTick = tileMap.currentTick + ((tileMap.TicksPerSecond * 10) - tileData.PreviousTick)
+					effectiveTick = tileMap.currentTick + ((ebiten.TPS() * 10) - tileData.PreviousTick)
 				} else {
 					effectiveTick = tileMap.currentTick - tileData.PreviousTick
 				}
-				if effectiveTick*16 > tileData.Animation[*tileData.PreviousFrame].Duration {
+				if float64(effectiveTick)/float64(ebiten.TPS()) > (float64(tileData.Animation[*tileData.PreviousFrame].Duration) / 1000) {
 					frameIdx = (*tileData.PreviousFrame + 1) % len(tileData.Animation)
 					tileData.PreviousFrame = &frameIdx
 					tileData.PreviousTick = tileMap.currentTick
@@ -483,7 +482,7 @@ func (tileMap *TileMap) GetDimensions() (int, int) {
 
 func (tileMap *TileMap) Update(data *interface{}) {
 	tileMap.currentTick = tileMap.currentTick + 1
-	tileMap.currentTick = tileMap.currentTick % (tileMap.TicksPerSecond * 10)
+	tileMap.currentTick = tileMap.currentTick % (ebiten.TPS() * 10)
 }
 
 func (tileMap *TileMap) Draw(screen *ebiten.Image) {
@@ -543,7 +542,6 @@ func OpenTileMapWithFileSystem(file string, filesystem fs.FS) *TileMap {
 
 	// we initialize our Users array
 	var tilemap TileMap
-	tilemap.TicksPerSecond = 60
 	tilemap.currentTick = 0
 	tilemap.Path = file
 	tilemap.Zoom = 1
