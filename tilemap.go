@@ -192,8 +192,8 @@ func (layer *Layer) Draw(screen *ebiten.Image) {
 			tlY := float64(y * tileMap.TileHeight)
 
 			op := &ebiten.DrawImageOptions{}
-			op.GeoM.Translate(tlX, tlY)
 			op.GeoM.Scale(tileMap.Zoom, tileMap.Zoom)
+			op.GeoM.Translate(tlX, tlY)
 
 			sx := (tileId % tileSet.Columns) * tileSet.TileWidth
 			sy := (tileId / tileSet.Columns) * tileSet.TileHeight
@@ -283,9 +283,9 @@ func (objectGroup *TileMapObjectGroup) Draw(screen *ebiten.Image) {
 		}
 
 		op := &ebiten.DrawImageOptions{}
-		op.GeoM.Translate(object.X, object.Y-float64(tileSet.TileHeight))
 		op.GeoM.Scale(float64(object.Height)/float64(tileSet.TileHeight), float64(object.Width)/float64(tileSet.TileWidth))
 		op.GeoM.Scale(tileMap.Zoom, tileMap.Zoom)
+		op.GeoM.Translate(object.X, object.Y-float64(tileSet.TileHeight))
 
 		sx := (tileId % tileSet.Columns) * tileSet.TileWidth
 		sy := (tileId / tileSet.Columns) * tileSet.TileHeight
