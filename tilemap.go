@@ -521,7 +521,7 @@ func (tileMap *TileMap) GetGroupLayerByName(name string) *GroupLayer {
 
 // This opens a .tmx file based on the current working directory.
 //
-// An example call would looke like: tilemap.OpenTileMap("assets/tilemap/base.tmx")
+// An example call would looke like: etiled.OpenTileMap("assets/tilemap/base.tmx")
 func OpenTileMap(file string) *TileMap {
 	workingDir, _ := os.Getwd()
 	return OpenTileMapWithFileSystem(file, os.DirFS(workingDir))
