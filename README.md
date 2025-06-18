@@ -10,10 +10,21 @@ Features
 * Ability to use a provided Filesystem.
 * Ability to render animated tile maps
 
+
+
 Example
 ------
+```bash
+    # Get the latest version of the library
+    go get github.com/bird-mtn-dev/ebitengine-tiled
+```
+
 ```golang
-    
+    // Import the library
+    import (
+        etiled "github.com/bird-mtn-dev/ebitengine-tiled"
+    )
+
     // Load the xml output from tiled during the initilization of the Scene.
     // Note that OpenTileMap will attempt to load the associated tilesets and tile images 
     Tilemap = etiled.OpenTileMap("assets/tilemap/base.tmx")
