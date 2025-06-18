@@ -284,6 +284,7 @@ func (objectGroup *TileMapObjectGroup) Draw(screen *ebiten.Image) {
 
 		op := &ebiten.DrawImageOptions{}
 		op.GeoM.Translate(object.X, object.Y-float64(tileSet.TileHeight))
+		op.GeoM.Scale(float64(object.Height)/float64(tileSet.TileHeight), float64(object.Width)/float64(tileSet.TileWidth))
 		op.GeoM.Scale(tileMap.Zoom, tileMap.Zoom)
 
 		sx := (tileId % tileSet.Columns) * tileSet.TileWidth
