@@ -42,7 +42,6 @@ type TileMap struct {
 	allLayers     []*Layer
 	allGroups     []*TileMapObjectGroup
 	AllCollisions []*TileSetObject
-	Zoom          float64
 }
 
 type TileSetDefinition struct {
@@ -192,7 +191,6 @@ func (layer *Layer) Draw(screen *ebiten.Image) {
 			tlY := float64(y * tileMap.TileHeight)
 
 			op := &ebiten.DrawImageOptions{}
-			op.GeoM.Scale(tileMap.Zoom, tileMap.Zoom)
 			op.GeoM.Translate(tlX, tlY)
 
 			sx := (tileId % tileSet.Columns) * tileSet.TileWidth
@@ -284,7 +282,6 @@ func (objectGroup *TileMapObjectGroup) Draw(screen *ebiten.Image) {
 
 		op := &ebiten.DrawImageOptions{}
 		op.GeoM.Scale(float64(object.Height)/float64(tileSet.TileHeight), float64(object.Width)/float64(tileSet.TileWidth))
-		op.GeoM.Scale(tileMap.Zoom, tileMap.Zoom)
 		op.GeoM.Translate(object.X, object.Y-float64(tileSet.TileHeight))
 
 		sx := (tileId % tileSet.Columns) * tileSet.TileWidth
@@ -478,7 +475,7 @@ func (tileMap *TileMap) GetTileSetByTileId(id int) (*TileSet, int) {
 }
 
 func (tileMap *TileMap) GetDimensions() (int, int) {
-	return int(float64(tileMap.Width) * float64(tileMap.TileWidth) * tileMap.Zoom), int(float64(tileMap.Height) * float64(tileMap.TileHeight) * tileMap.Zoom)
+	return int(float64(tileMap.Width) * float64(tileMap.TileWidth)), int(float64(tileMap.Height) * float64(tileMap.TileHeight))
 }
 
 func (tileMap *TileMap) Update() {
@@ -545,7 +542,6 @@ func OpenTileMapWithFileSystem(file string, filesystem fs.FS) *TileMap {
 	var tilemap TileMap
 	tilemap.currentTick = 0
 	tilemap.Path = file
-	tilemap.Zoom = 1
 	// we unmarshal our byteArray which contains our
 	// xmlFiles content into 'users' which we defined above
 
