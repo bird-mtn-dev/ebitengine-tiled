@@ -24,9 +24,19 @@ Example
     // Call Update on the Tilemap during the ebitengine Update loop
     Tilemap.Update()
 
-    // Call Draw on the Tileap during the ebitegine Draw loop
+    // Call Draw on the Tilemap during the ebitegine Draw loop to draw all the layers in the tilemap
     Tilemap.Draw(worldScreen)
 
+    // This loop will draw all the Object Groups in the Tilemap.
+    for idx := range Tilemap.ObjectGroups {
+        Tilemap.ObjectGroups[idx].Draw(worldScreen)
+    }
+
+    // You can draw a specific Layer by calling
+    Tilemap.GetLayerByName("layer1").Draw(worldScreen)
+
+    // You can draw a specific Object Group by calling
+    Tilemap.GetObjectGroupByName("ojbect group 1").Draw(worldScreen)
 ```
 
 
