@@ -1,4 +1,4 @@
-package tilemap
+package etiled
 
 import (
 	"encoding/xml"
